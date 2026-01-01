@@ -1,0 +1,19 @@
+{
+    "window_size": 30,
+    "feature_columns": [
+        "Close",
+        "Volume",
+        "RSI",
+        "SMA",
+        "EMA",
+        "MACD_Hist",
+        "BB_Width",
+        "BB_Percentage"
+    ],
+    "hidden_size": 64,
+    "num_layers": 1,
+    "dropout_rate": 0.17422791889810757,
+    "learning_rate": 0.0011244897411522136,
+    "weight_decay": 5.315351276670217e-05,
+    "batch_size": 64
+}
