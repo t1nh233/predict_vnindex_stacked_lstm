@@ -47,7 +47,10 @@ def convert_change(change_str):
     return number / 100.0
 
 def load_and_process_data(file_path):
-    df = pd.read_csv(file_path)
+    if file_path.endswith('.xlsx') or file_path.endswith('.xls'):
+        df = pd.read_excel(file_path)
+    else:
+        df = pd.read_csv(file_path)
 
     ## Xu ly du lieu thoi gian va dua Date thanh index
     df['Date'] = pd.to_datetime(df['Date'], format='%m/%d/%Y')
