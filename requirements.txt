@@ -6,4 +6,3 @@ torch
 pandas_ta
 optuna
 joblib
-os 
