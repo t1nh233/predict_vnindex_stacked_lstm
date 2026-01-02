@@ -9,10 +9,23 @@ import argparse
 
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 
+# try:
+#     from src.model import LSTMModel
+#     from src.utils import load_and_process_data, feature_extraction
+# except ImportError:
+#     sys.exit(1)
+
 try:
     from src.model import LSTMModel
     from src.utils import load_and_process_data, feature_extraction
-except ImportError:
+    print("✅ Import thành công!")
+except ImportError as e:
+    print("\n❌ LỖI IMPORT NGHIÊM TRỌNG:")
+    print(f"Chi tiết lỗi: {e}")
+    print(f"Đường dẫn hiện tại (getcwd): {os.getcwd()}")
+    print(f"Danh sách file tại đây: {os.listdir()}")
+    if os.path.exists('src'):
+        print(f"Danh sách file trong src: {os.listdir('src')}")
     sys.exit(1)
 
 MODEL_DIR = 'models'
