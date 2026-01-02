@@ -10,7 +10,7 @@ import argparse
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 
 try:
-    from src.model import LSTMModel
+    from model import LSTMModel
     from src.utils import load_and_process_data, feature_extraction
 except ImportError:
     sys.exit(1)
@@ -24,30 +24,33 @@ DEVICE = torch.device('cpu')
 
 def main(input_file):
     if not os.path.exists(input_file):
+        print("Khong tim thay file input")
         return
     
     for f in [MODEL_PATH, CONFIG_PATH, SCALER_PATH]:
         if not os.path.exists(f):
+            print("Khong tim thay cac file train")
             return
 
     try:
         with open(CONFIG_PATH, 'r') as f:
             config = json.load(f)
-        feature_cols = config.get('feature_columns', [])
-        window_size = config.get('window_size', 30)
+            feature_cols = config.get('feature_columns', [])
+            window_size = config.get('window_size', 30)
 
-        scaler = joblib.load(SCALER_PATH)
+            scaler = joblib.load(SCALER_PATH)
 
-        model = LSTMModel(
-            input_size=len(feature_cols),
-            hidden_size=config['hidden_size'],
-            num_layers=config['num_layers'],
-            dropout_rate=config['dropout_rate']
-        ).to(DEVICE)
-        model.load_state_dict(torch.load(MODEL_PATH, map_location=DEVICE))
-        model.eval()
+            model = LSTMModel(
+                input_size=len(feature_cols),
+                hidden_size=config['hidden_size'],
+                num_layers=config['num_layers'],
+                dropout_rate=config['dropout_rate']
+            ).to(DEVICE)
+            model.load_state_dict(torch.load(MODEL_PATH, map_location=DEVICE))
+            model.eval()
         
     except Exception:
+        print("Lỗi khi tải model hoặc config")
         return
 
     try:
@@ -67,6 +70,7 @@ def main(input_file):
 
         input_raw = last_window[needed_cols].values
         if input_raw.shape[1] != n_features_expected:
+            print("Dữ liệu đầu vào không đúng định dạng")
             return
         
         input_scaled = scaler.transform(input_raw)
@@ -74,6 +78,7 @@ def main(input_file):
         X_tensor = torch.tensor(X_input, dtype=torch.float32).unsqueeze(0).to(DEVICE)
 
     except Exception:
+        print("Lỗi khi xử lý dữ liệu đầu vào")
         return
 
     with torch.no_grad():
