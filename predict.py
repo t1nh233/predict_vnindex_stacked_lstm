@@ -18,9 +18,9 @@ sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 try:
     from src.model import LSTMModel
     from src.utils import load_and_process_data, feature_extraction
-    print("✅ Import thành công!")
+    print("Import thành công")
 except ImportError as e:
-    print("\n❌ LỖI IMPORT NGHIÊM TRỌNG:")
+    print("\nLỗi khi import:")
     print(f"Chi tiết lỗi: {e}")
     print(f"Đường dẫn hiện tại (getcwd): {os.getcwd()}")
     print(f"Danh sách file tại đây: {os.listdir()}")
