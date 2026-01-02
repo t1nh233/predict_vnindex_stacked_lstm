@@ -10,7 +10,7 @@ import argparse
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 
 try:
-    from model import LSTMModel
+    from src.model import LSTMModel
     from src.utils import load_and_process_data, feature_extraction
 except ImportError:
     sys.exit(1)
@@ -24,12 +24,12 @@ DEVICE = torch.device('cpu')
 
 def main(input_file):
     if not os.path.exists(input_file):
-        print("Khong tim thay file input")
+        print("Không tìm thấy file input")
         return
     
     for f in [MODEL_PATH, CONFIG_PATH, SCALER_PATH]:
         if not os.path.exists(f):
-            print("Khong tim thay cac file train")
+            print("Không tìm thấy các file cấu hình")
             return
 
     try:
@@ -92,10 +92,10 @@ def main(input_file):
         last_close = last_window['Close'].iloc[-1]
         change = final_price - last_close
         return {
-            "date": last_date,
-            "last_close": last_close,
-            "predicted_close": final_price,
-            "change": change
+            "Hôm nay": last_date,
+            "Giá đóng hôm nay": last_close,
+            "Dự đoán giá ngày mai": final_price,
+            "Change": change
         }
 
 if __name__ == "__main__":
