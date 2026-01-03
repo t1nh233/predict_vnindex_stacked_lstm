@@ -1,10 +1,8 @@
 numpy<2.0.0
-pandas==2.2.2
-matplotlib==3.10.0
-scikit-learn==1.6.1
-torch==2.9.0
-pandas_ta==0.4.67b0
-numba==0.61.2
-optuna==4.6.0
-joblib==1.5.3
-statsmodels==0.14.6
+pandas
+matplotlib
+scikit-learn
+torch
+optuna
+joblib
+statsmodels
