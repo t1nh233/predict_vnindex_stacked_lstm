@@ -5,6 +5,8 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import os
+import joblib
 
 from statsmodels.tsa.stattools import adfuller
 from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
@@ -16,7 +18,7 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 # =====================================================
 # 1. LOAD & PREPROCESS DATA
 # =====================================================
-file_path = "vn_index_historical_data_9_12.csv"
+file_path = "https://raw.githubusercontent.com/t1nh233/predict_vnindex_stacked_lstm/refs/heads/main/data/raw/vn_index_historical_data_9_12.csv"
 df = pd.read_csv(file_path)
 
 df['Date'] = pd.to_datetime(df['Date'], format='%m/%d/%Y')
@@ -34,6 +36,15 @@ df['Close'] = df['Close'].ffill()
 close_series = np.log(df['Close'])
 
 print(close_series.info())
+
+
+BASE_DIR = os.getcwd()
+MODEL_DIR = os.path.join(BASE_DIR, 'models')
+RESULT_DIR = os.path.join(BASE_DIR, 'results')
+FIGURE_DIR = os.path.join(BASE_DIR, 'figures')
+
+for d in [MODEL_DIR, RESULT_DIR, FIGURE_DIR]:
+    os.makedirs(d, exist_ok=True)
 
 # =====================================================
 # 2. TRAIN / VALIDATION / TEST SPLIT
@@ -99,6 +110,12 @@ for p in [0, 1, 2, 3]:
 
 print("\nBest ARIMA order:", best_order)
 
+final_model = ARIMA(pd.concat([train_data, val_data]), order=best_order).fit()
+
+model_path = os.path.join(MODEL_DIR, 'best_vnindex_arima.pkl')
+joblib.dump(final_model, model_path)
+
+
 # =====================================================
 # 6. ROLLING FORECAST (SLIDING WINDOW)
 # =====================================================
@@ -132,6 +149,12 @@ print(f"MAE : {mae:.4f}")
 print(f"RMSE: {rmse:.4f}")
 print(f"R2  : {r2:.4f}")
 
+metrics_path = os.path.join(RESULT_DIR, 'arima_evaluation_metrics.txt')
+with open(metrics_path, 'w') as f:
+    f.write(f"MAE: {mae:.4f}\n")
+    f.write(f"RMSE: {rmse:.4f}\n")
+    f.write(f"R2 Score: {r2:.4f}\n")
+
 # =====================================================
 # 8. RESIDUAL DIAGNOSTICS
 # =====================================================
@@ -152,4 +175,8 @@ plt.xlabel('Date')
 plt.ylabel('VN-Index')
 plt.legend()
 plt.grid(True)
+
+plot_path = os.path.join(FIGURE_DIR, 'arima_prediction_chart.png')
+plt.savefig(plot_path)
+
 plt.show()
