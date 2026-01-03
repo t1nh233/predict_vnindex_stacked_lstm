@@ -11,9 +11,9 @@
         "BB_Percentage"
     ],
     "hidden_size": 128,
-    "num_layers": 1,
-    "dropout_rate": 0.2667543858871632,
-    "learning_rate": 0.0015531450985637816,
-    "weight_decay": 1.286257907682488e-05,
+    "num_layers": 2,
+    "dropout_rate": 0.11246190508042161,
+    "learning_rate": 0.0002365025795809892,
+    "weight_decay": 7.121061873857167e-05,
     "batch_size": 32
 }
